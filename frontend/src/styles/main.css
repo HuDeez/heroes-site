@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+@import "../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+@import "../../node_modules/boxicons/css/boxicons.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+    list-style: none;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    border: none;
+    outline: none;
+    font-weight: 400;
+    color: #fff;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: "Comfortaa", sans-serif;
+}
+
+
+.public {
+    background-color: #121317;
+    flex-direction: column;
+}
+
+.admin {
+    background-color: #f3f3f3;
+    font-family: "Roboto", sans-serif;
+
+    :global {
+        color: #000;
+    }
+    flex-direction: row;
+
+}
+
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+header {
+    flex: 0 0 auto;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex: 0 0 auto;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #121317;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #33579e;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #66acff;
+}
+

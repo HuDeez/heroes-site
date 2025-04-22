@@ -1,0 +1,26 @@
+networks:
+  dev:
+
+
+services:
+  nginx:
+    image: nginx:stable-alphine
+    ports:
+      - '80:80'
+    volumes:
+      - './nginx.conf:etc/nginx/nginx.conf'
+    networks:
+      - dev
+
+  frontend:
+    build: 
+      context: ./frontend
+    networks:
+      - dev
+    
+  backend:
+    build: 
+      context: ./backend
+    networks:
+      - dev
+    
