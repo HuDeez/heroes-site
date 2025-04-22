@@ -12,7 +12,7 @@ from api.v1.entities.news.schema import NewsDeclarative as NewsBase
 logger = logging.getLogger(__name__)
 
 engine = create_async_engine(
-    url='postgresql+asyncpg://postgres:postgres@localhost:5432/postgres'
+    url='postgresql+asyncpg://postgres:postgres@31.128.47.37:5432/postgres'
 )
 
 get_session = async_sessionmaker(
