@@ -9,16 +9,16 @@ export default defineConfig({
       plugins: [tailwindcss()]
     }
   },
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://127.0.0.1:8000", // FastAPI сервер
-        changeOrigin: true,
-        secure: false,
-      },
-      "/static": {
-        target: "http://127.0.0.1:8000"
-      }
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     "/api": {
+  //       target: "http://127.0.0.1:8000", // FastAPI сервер
+  //       changeOrigin: true,
+  //       secure: false,
+  //     },
+  //     "/static": {
+  //       target: "http://127.0.0.1:8000"
+  //     }
+  //   },
+  // },
 })
