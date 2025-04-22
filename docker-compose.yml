@@ -4,7 +4,7 @@ networks:
 
 services:
   nginx:
-    image: nginx:stable-alphine
+    image: nginx:stable-alpine
     ports:
       - '80:80'
     volumes:
