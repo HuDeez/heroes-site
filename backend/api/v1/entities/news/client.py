@@ -28,39 +28,30 @@ class HTTPClient:
         if self._session:
             await self._session.close()
 
-    async def _get_html(self, url: str = '', retries: int = 5):
+    async def _get_html(self, url: str = ''):
         full_url = self._base_url + url
-        for _ in range(retries):
-            try:
-                async with self._session.get(full_url) as response:
-                    status = response.status
-                    if status != 200:
-                        logger.error(
-                            msg=f"The response status is invalid: {status}"
-                        )
-                        return None
-
-                    content = await response.text()
-
-                    if "Ошибка 429" in content:
-                        logger.error(
-                            msg="Too many requests. Repeating a request..."
-                        )
-
-                        await asyncio.sleep(300)
-                        continue
-
-                    return content
-            except Exception as e:
-                logger.exception(
-                    msg=f"Failed to get {full_url}: {e}"
-                )
-                return None
-
-        logger.error(
-            msg=f"Failed to get dates from {full_url} after {retries} retries"
-        )
-        return None
+        try:
+            async with self._session.get(full_url) as response:
+                status = response.status
+                if status != 200:
+                    logger.error(
+                        msg=f"The response status is invalid: {status}"
+                    )
+                    return None     
+                content = await response.text()     
+                if "Ошибка 429" in content:
+                    logger.error(
+                        msg="Too many requests. Repeating a request..."
+                    )       
+                    return None
+                    
+                return content
+            
+        except Exception as e:
+            logger.exception(
+                msg=f"Failed to get {full_url}: {e}"
+            )
+            return None
 
     async def _create_soup(self, url: str = ''):
         html = await self._get_html(url)
