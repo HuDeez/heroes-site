@@ -16,7 +16,7 @@ export default function HeroCard({ heroesData }) {
                 <div className="photo h-[300px] sm:h-[400px] overflow-hidden">
                     <img
                         src={`/static/${heroesData.id}.png?v=${heroesData.timestamp}`}
-                        onError={(e) => e.target.src = '/unknown_soldier.jpg'}
+                        onError={(e) => e.target.src = `/unknown_soldier.jpg`}
                         alt="avatar"
                         className="w-full h-full object-cover rounded-2xl"/>
                 </div>

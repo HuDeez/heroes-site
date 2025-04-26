@@ -16,7 +16,6 @@ async def get_news():
 
 
 async def start():
-    await get_news()
     scheduler.add_job(get_news, 'interval', seconds=3600)
     scheduler.start()
 
