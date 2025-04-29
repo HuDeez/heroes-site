@@ -29,10 +29,10 @@ export default function Heroes() {
     }, [])
 
     return (
-        <div className="news p-12 flex flex-col space-y-6 w-full">
+        <>
             {loading && <LoadingCard />}
             {error ? <ErrorCard /> : !loading && <HeroesBlock isMobile={isMobile} heroes={heroes}/>}
-        </div>
+        </>
     )
 }
 
@@ -53,7 +53,7 @@ function HeroesBlock({ isMobile, heroes }) {
 
 function DesktopHeroes({heroes}) {
     return (
-        <div className="list grid 2xl:grid-cols-4 gap-12 md:grid-cols-2 xl:grid-cols-3">
+        <div className="list grid 2xl:grid-cols-4 gap-12 md:grid-cols-2 xl:grid-cols-3 p-5">
             {heroes.map((hero) => (
                 <HeroCard key={hero.id} heroesData={hero}/>
             ))}
@@ -63,7 +63,7 @@ function DesktopHeroes({heroes}) {
 
 function MobileHeroes({heroes}) {
     return (
-        <div className={`flex flex-col gap-10 p-2`}>
+        <div className={`flex flex-col gap-10 p-5`}>
             {
                 heroes.map((hero) => (
                     <HeroCard key={hero.id} heroesData={hero}/>

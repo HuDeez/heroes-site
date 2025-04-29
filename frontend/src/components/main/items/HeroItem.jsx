@@ -41,7 +41,7 @@ function DesktopHero({heroesData}) {
                             <h1 className="text-[50px] xl:text-[65px] p-1">{heroesData.surname}</h1>
                         </div>
                         <div className="trait bg-[#131417] p-4 rounded-2xl w-full">
-                            <p className="w-[400px] text-[23px] hyphens-auto tracking-[-1px] text-justify text-pretty">{heroesData.card_description}</p>
+                            <p className="w-[400px] text-[23px] hyphens-auto tracking-[-1px] text-left text-pretty">{heroesData.card_description}</p>
                         </div>
                     </div>
                     <div className="photo h-[400px] overflow-hidden">
@@ -66,7 +66,7 @@ function DesktopHero({heroesData}) {
 function MobileHero({heroesData}) {
     return (
         <>
-            <div className="head w-full h-full p-8">
+            <div className="head w-full h-full p-3">
                 <div className="head-wrapper bg-[#181a1e] p-4 flex flex-col-reverse justify-around rounded-3xl items-center gap-6" >
                     <div className="information flex flex-col gap-6 items-center">
                         <div className="name w-full text-center">
@@ -74,7 +74,7 @@ function MobileHero({heroesData}) {
                             <h1 className="text-[40px] p-1">{heroesData.surname}</h1>
                         </div>
                         <div className="trait bg-[#131417] p-4 rounded-2xl w-full">
-                            <p className="text-[23px] text-center">{heroesData.card_description}</p>
+                            <p className="text-[23px] text-left">{heroesData.card_description}</p>
                         </div>
                     </div>
                     <div className="photo h-[400px] overflow-hidden">
@@ -86,7 +86,7 @@ function MobileHero({heroesData}) {
                 </div>
                 </div>
             </div>
-            <div className="content-box w-full items-center flex flex-col gap-4 p-10">
+            <div className="content-box w-full items-center flex flex-col gap-4 p-3">
                 <h1 className="text-4xl p-1">О герое</h1>
                 <div className="bio p-4 bg-[#181a1e] rounded-2xl w-full">
                     <p className="text-xl p-2 text-pretty hyphens-auto tracking-[-1px] leading-[50px] text-left whitespace-pre-line">{heroesData.description}</p>

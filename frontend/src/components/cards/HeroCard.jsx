@@ -10,7 +10,7 @@ export default function HeroCard({ heroesData }) {
     return (
         <>
             <div
-                className="content-box flex flex-col gap-3 bg-[#181a1e] p-6 rounded-2xl items-center "
+                className="content-box flex flex-col gap-3 bg-[#181a1e] p-6 rounded-2xl items-center transition duration-200 hover:bg-[#212428] cursor-pointer"
                 onClick={handleClick}
             >
                 <div className="photo h-[300px] sm:h-[400px] overflow-hidden">

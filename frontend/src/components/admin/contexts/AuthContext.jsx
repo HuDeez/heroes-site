@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import {Outlet, useNavigate} from "react-router-dom";
 import apiClient from "../api/client.jsx";
+import useDeviceDetect from "../../utils/DeviceDetect.jsx";
 
 export const AuthContext = createContext({});
 
@@ -27,6 +28,7 @@ export default function AuthProvider() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { isMobile } = useDeviceDetect()
 
     useEffect(() => {
         initializeAuth();
@@ -86,7 +88,7 @@ export default function AuthProvider() {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, logout, loading, isMobile}}>
             <Outlet />
         </AuthContext.Provider>
     );

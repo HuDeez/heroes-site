@@ -8,7 +8,7 @@ export default function PublicLayout() {
     const { isMobile } = useDeviceDetect()
 
     return (
-        <div className="wrapper public">
+        <div className="wrapper public flex-col gap-6">
             <Header isMobile={isMobile}/>
             <main className="flex flex-col justify-center items-center gap-4">
                 <Outlet context={[isMobile]}/>

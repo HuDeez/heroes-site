@@ -1,9 +1,11 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import apiClient from "../api/client.jsx";
 import HeroPanelCard from "../components/HeroPanelCard.jsx";
-import LoadingCard from "../../cards/LoadingCard.jsx";
+import {AuthContext} from "../contexts/AuthContext.jsx";
+import AdminCard from "../components/AdminCard.jsx";
 
 export default function HeroesPanel() {
+    const {isMobile} = useContext(AuthContext)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [heroes, setHeroes] = useState([]);
@@ -56,18 +58,18 @@ export default function HeroesPanel() {
     const modalWindow = () => {
         return (
             <div
-                className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10 p-12 overflow-hidden">
+                className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10 p-2 2xl:p-12 overflow-hidden">
                 <div className="card-body bg-[#E9EBF6] w-full p-3 rounded-2xl flex flex-col gap-4">
                     <div className="head p-3 bg-[#D6D4F6] rounded-3xl w-full">
-                        <h1 className="text-black text-center">Добавление нового героя</h1>
+                        <h1 className="text-black text-xl text-center">Добавление нового героя</h1>
                     </div>
                     <div className="body p-2 w-full bg-[#D6D4F6] rounded-3xl">
-                        <div className="content-box flex flex-row w-full p-2">
-                            <div className="head w-1/2 p-2">
-                                <p className="text-black">Параметры</p>
+                        <div className="content-box flex flex-row max-md:flex-col w-full p-2">
+                            <div className="head w-1/2 p-2 max-md:w-full">
+                                <p className="text-black max-md:text-center">Параметры</p>
                             </div>
                             <div className="parameters w-full">
-                                <form method="post" className="p-6 flex flex-col gap-3 text-black"
+                                <form method="post" className="flex flex-col gap-3 text-black"
                                       id="update-admin">
                                     <div className="name text-inherit">
                                         <label htmlFor="name" className="text-inherit">Имя: </label>
@@ -98,7 +100,7 @@ export default function HeroesPanel() {
                                     <div className="card_description text-inherit">
                                         <label htmlFor="description" className="text-inherit">Описание карточки: </label>
                                         <textarea
-                                            className="p-2 rounded-xl text-black w-full text-base max-h-[100px]"
+                                            className="p-2 rounded-xl text-black w-full text-base max-md:max-h-[100px] overflow-auto"
                                             name="card_description"
                                             id="card_description"
                                             rows="10"
@@ -111,7 +113,7 @@ export default function HeroesPanel() {
                                     <div className="description text-inherit">
                                         <label htmlFor="description" className="text-inherit">Описание: </label>
                                         <textarea
-                                            className="p-2 rounded-xl text-black w-full text-base size-full min-h-[300px]"
+                                            className="p-2 rounded-xl text-black w-full text-base size-full max-md:max-h-[100px] overflow-auto"
                                             name="description"
                                             id="description"
                                             rows="10"
@@ -122,7 +124,7 @@ export default function HeroesPanel() {
                                         ></textarea>
                                     </div>
                                     <div className="avatar col-span-full flex flex-col items-center">
-                                        <label>
+                                        <label className={`w-full`}>
                                             <input
                                                 type="file"
                                                 hidden
@@ -174,59 +176,129 @@ export default function HeroesPanel() {
         )
     }
 
-    const heroesList = () => {
-        return (
-            <>
-                <div className="admins-list p-6 text-center content-center">
-                    <h1 className="text-black">Список героев</h1>
-                    <div className="heroes grid grid-cols-4 gap-4 p-4">
-                        {heroes.map((hero) => (
-                            <HeroPanelCard
-                                dates={hero}
-                                key={hero.id}
-                                fetch={fetchHeroes}
-                            />
-                        ))}
-                    </div>
-                </div>
-                <div className="footer w-full p-4">
-                    <div
-                        className="footer-box p-4 flex flex-col items-start justify-start gap-3 bg-[#E9EBF6] rounded-3xl w-1/2">
-                        <div className="head w-full">
-                            <h1 className="text-black">Статистика</h1>
-                        </div>
-                        <div className="body flex flex-row justify-between w-full">
-                            <div className="quantity p-3 bg-[#D6D4F6] rounded-2xl content-center">
-                                <p className="text-black">Общее количество: {heroes.length}</p>
-                            </div>
-                            <div className="buttons p-3">
-                                <button
-                                    className="p-3 bg-[#D6D4F6] hover:bg-[#B9B6FF] cursor-pointer transition-all text-black rounded-2xl w-full"
-                                    onClick={open}
-                                >
-                                    Добавить
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </>
-        )
-    }
 
     useEffect(() => {
         fetchHeroes();
     }, [])
 
     return (
-        <div className="w-full h-full content-center p-8">
-            <div className="content-wrapper flex flex-col justify-between bg-[#FAFAFA] h-full rounded-2xl">
-                {loading && <LoadingCard />}
-                {error ? <h1 className="text-black">Произошла непредвиденная ошибка</h1> : !loading && heroesList()}
-            </div>
-
-            {isModal && modalWindow()}
-        </div>
+        <>
+            {
+                isMobile ?
+                    <MobileHeroesPanel
+                        heroes={heroes}
+                        fetchHeroes={fetchHeroes}
+                        open={open}
+                        isModal={isModal}
+                        modalWindow={modalWindow}
+                    />
+                    :
+                    <DesktopHeroesPanel
+                        heroes={heroes}
+                        fetchHeroes={fetchHeroes}
+                        open={open}
+                        isModal={isModal}
+                        modalWindow={modalWindow}
+                    />
+            }
+        </>
     );
+}
+
+
+function DesktopHeroesPanel({heroes, fetchHeroes, open, isModal, modalWindow}) {
+    return (
+        <>
+            <div className="p-8">
+                <div className="content-box p-4 bg-[#fff] rounded-2xl">
+                    <div className="heroes-list text-center content-center gap-4">
+                        <div className="header">
+                            <h1 className="text-black">Список героев</h1>
+                        </div>
+                        <div className="heroes grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 p-4">
+                            {heroes.map((hero) => (
+                                <HeroPanelCard
+                                    dates={hero}
+                                    key={hero.id}
+                                    fetch={fetchHeroes}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div className="footer w-full p-4">
+                        <div
+                            className="footer-box p-4 flex flex-col items-start justify-start gap-3 bg-[#E9EBF6] rounded-3xl w-1/2">
+                            <div className="head w-full">
+                                <h1 className="text-black">Статистика</h1>
+                            </div>
+                            <div className="body flex flex-row justify-between w-full">
+                                <div className="quantity p-3 bg-[#D6D4F6] rounded-2xl content-center">
+                                    <p className="text-black">Общее количество: {heroes.length}</p>
+                                </div>
+                                <div className="buttons p-3">
+                                    <button
+                                        className="p-3 bg-[#D6D4F6] hover:bg-[#B9B6FF] cursor-pointer transition-all text-black rounded-2xl w-full"
+                                        onClick={open}
+                                    >
+                                        Добавить
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {isModal && modalWindow()}
+                </div>
+            </div>
+        </>
+    )
+}
+
+function MobileHeroesPanel({heroes, fetchHeroes, open, isModal, modalWindow}) {
+    return (
+        <>
+            <div className="p-4">
+                <div className="content-box bg-[#fff] rounded-2xl flex flex-col gap-4">
+                    <div className="admins-list flex flex-col gap-4 items-center">
+                        <div className="header p-2">
+                            <h1 className="text-black text-2xl text-center">Список героев</h1>
+                        </div>
+
+                        <div className="admins grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 w-full">
+                            {heroes.map((hero) => (
+                                <HeroPanelCard
+                                    dates={hero}
+                                    key={hero.id}
+                                    fetch={fetchHeroes}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div className="footer w-full p-4">
+                        <div className="footer-box p-4 bg-[#E9EBF6] rounded-3xl flex flex-col items-center gap-4">
+                            <div className="head w-full text-center">
+                                <h1 className="text-black text-2xl">Статистика</h1>
+                            </div>
+                            <div className="body flex flex-col justify-between w-full gap-4">
+                                <div className="quantity p-3 bg-[#D6D4F6] rounded-2xl content-center">
+                                    <p className="text-black">Общее количество: {heroes.length}</p>
+                                </div>
+                                <div className="buttons">
+                                    <button
+                                        className="p-3 bg-[#D6D4F6] hover:bg-[#B9B6FF] cursor-pointer transition-all text-black rounded-2xl w-full"
+                                        onClick={open}
+                                    >
+                                        Добавить
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {isModal && modalWindow()}
+                </div>
+            </div>
+        </>
+    )
 }
 

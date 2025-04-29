@@ -56,24 +56,28 @@ footer {
     flex: 0 0 auto;
 }
 
-/* width */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 0;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-    background: #121317;
-}
+/*!* width *!*/
+/*::-webkit-scrollbar {*/
+/*    width: 10px;*/
+/*}*/
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #33579e;
-    border-radius: 5px;
-}
+/*!* Track *!*/
+/*::-webkit-scrollbar-track {*/
+/*    background: #121317;*/
+/*}*/
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #66acff;
-}
+/*!* Handle *!*/
+/*::-webkit-scrollbar-thumb {*/
+/*    background: #33579e;*/
+/*    border-radius: 5px;*/
+/*}*/
+
+/*!* Handle on hover *!*/
+/*::-webkit-scrollbar-thumb:hover {*/
+/*    background: #66acff;*/
+/*}*/
 

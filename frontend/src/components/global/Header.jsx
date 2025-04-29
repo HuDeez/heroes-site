@@ -1,6 +1,7 @@
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import HamburgerMenuButton from "../buttons/HamburgerMenuButton.jsx";
-import {useCallback, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
+import apiClient from "../admin/api/client.jsx";
 
 export default function Header({isMobile}) {
     const currentLocation = useLocation();
@@ -12,11 +13,13 @@ export default function Header({isMobile}) {
         if (!modalRef.current || !windowRef.current) return;
 
         if (show) {
+            document.body.classList.add("fixed", 'w-full');
           modalRef.current.classList.remove('hidden');
           setTimeout(() => {
             windowRef.current.classList.remove('-translate-y-full', 'opacity-0');
           }, 10);
         } else {
+            document.body.classList.remove("fixed", 'w-full');
           windowRef.current.classList.add('-translate-y-full', 'opacity-0');
           setTimeout(() => {
             modalRef.current.classList.add('hidden');
@@ -92,7 +95,12 @@ function DesktopHeader({navigation, location, toggleSearchModal, windowRef, moda
                 <i className="bi bi-search flex" />
             </button>
 
-            <SearchField toggleSearchModal={toggleSearchModal} windowRef={windowRef} modalRef={modalRef}/>
+            <SearchField
+                toggleSearchModal={toggleSearchModal}
+                windowRef={windowRef}
+                modalRef={modalRef}
+                isMobile={false}
+            />
     </div>
   );
 }
@@ -141,7 +149,11 @@ function MobileHeader({navigation, toggleSearchModal, windowRef, modalRef}) {
                             </button>
                         </li>
                     </ul>
-                    <SearchField toggleSearchModal={toggleSearchModal} windowRef={windowRef} modalRef={modalRef} isMobile={true}/>
+                    <SearchField
+                        toggleSearchModal={toggleSearchModal}
+                        windowRef={windowRef}
+                        modalRef={modalRef}
+                        isMobile={true}/>
                 </nav>
             </div>
         </div>
@@ -149,30 +161,103 @@ function MobileHeader({navigation, toggleSearchModal, windowRef, modalRef}) {
 }
 
 function SearchField({modalRef, windowRef, toggleSearchModal, isMobile}) {
+
+    const navigate = useNavigate()
+    const [searchResults, setSearchResults] = useState([])
+    const [query, setQuery] = useState('');
+
+    useEffect(() => {
+        if (!query) return; // don't search if input is empty
+
+        const delayDebounce = setTimeout(async () => {
+          console.log('Sending search request for:', query);
+          const fetch = await apiClient.get(`/search?request=${query}`);
+            setSearchResults(fetch.data)
+        }, 700); // 500 ms delay after user stops typing
+
+    // Cleanup if user keeps typing (before 500ms)
+    return () => clearTimeout(delayDebounce);
+    }, [query]);
+
+    const handleClick = (heroesData) => {
+        navigate(`/heroes/${heroesData.id}`, { state: { heroesData } });
+    }
+
     return (
-        <div
-            ref={modalRef}
-            className="search-modal fixed inset-0 hidden"
-        >
+        <>
             <div
-                ref={windowRef}
-                className="flex justify-center items-center gap-8 bg-[#181a1e] p-6 rounded-lg shadow-lg text-center opacity-0 -translate-y-full transition-all duration-300"
+                ref={modalRef}
+                className="search-modal fixed inset-0 hidden flex flex-col overflow-hidden z-10"
             >
-                <input
-                    type="text"
-                    placeholder="Поиск героя, новостей..."
-                    className={`${isMobile ? 'w-full' : 'w-1/2'} p-6 text-base text-white bg-transparent border-2 border-solid rounded-2xl`}
-                    aria-label="Поиск"
-                />
-                <button
-                    type="button"
-                    className={`${isMobile && 'flex-shrink-0'} bg-blue-600 rounded-full hover:bg-blue-500 transition-all duration-200 p-4 cursor-pointer`}
-                    onClick={() => toggleSearchModal(false)}
-                    aria-label="Отменить поиск"
+                <div
+                    ref={windowRef}
+                    className="flex justify-center items-center gap-8 bg-[#181a1e] p-6 shadow-lg text-center opacity-0 -translate-y-full transition-all duration-300"
                 >
-                    <i className="bi bi-x-lg text-base flex"/>
-                </button>
+                    <input
+                        type="text"
+                        placeholder="Поиск героя по имени, фамилии..."
+                        className={`${isMobile ? 'w-full' : 'w-1/2'} p-6 text-base text-white bg-transparent border-2 border-solid rounded-2xl`}
+                        aria-label="Поиск"
+                        value={query}
+                        onChange={(e) => {
+                            setQuery(e.target.value);
+                        }}
+                    />
+                    <button
+                        type="button"
+                        className={`${isMobile && 'flex-shrink-0'} bg-blue-600 rounded-full hover:bg-blue-500 transition-all duration-200 p-4 cursor-pointer`}
+                        onClick={() => {
+                            toggleSearchModal(false);
+                            setQuery('');
+                            setSearchResults(null)
+                        }}
+                        aria-label="Отменить поиск"
+                    >
+                        <i className="bi bi-x-lg text-base flex"/>
+                    </button>
+                </div>
+
+                <div className={`bg-[#121317] flex-1 ${query === '' ? 'opacity-0 translate-y-1/2' : 'opacity-1 translate-y-0'} transition-all duration-500 ease-in-out`}>
+                    <div className="lst grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-center p-6 justify-between">
+                        {
+                            searchResults?.map((obj) => (
+                                <div
+                                    className={`p-2 bg-[#24262c] rounded-2xl hover:bg-[#323338] w-full text-center cursor-pointer transition-all duration-300 ease-in-out`}
+                                    key={obj.id}
+                                    onClick={() => {
+                                        handleClick(obj);
+                                        toggleSearchModal(false);
+                                        setQuery('');
+                                        setSearchResults(null);
+                                    }}
+                                >
+                                    <div className="content-box flex flex-row items-center justify-between gap-2">
+                                        <div className="avatar w-[80px] overflow-hidden flex-shrink-0">
+                                            <img
+                                                src={`/static/${obj.id}.png?v=${obj.timestamp}`}
+                                                onError={(e) => e.target.src = `/unknown_soldier.jpg`}
+                                                alt="avatar"
+                                                className="w-full h-full object-cover rounded-full"/>
+                                        </div>
+                                        <div className="text-center w-full">
+                                            <div className="title flex flex-col p-2 bg-[#1a1b1f] rounded-xl w-full mx-auto">
+                                                <div className="name">
+                                                    <h1 className={`text-white text-xl`}>{obj.name}</h1>
+                                                </div>
+                                                <div className="surname">
+                                                    <h1 className={`text-white text-xl`}>{obj.surname}</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+
             </div>
-        </div>
+        </>
+
     )
 }

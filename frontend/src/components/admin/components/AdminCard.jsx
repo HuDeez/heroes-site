@@ -7,7 +7,7 @@ function AdminCard({ dates, currentUser, fetch, logout}) {
     const [ credentials, setCredentials ] = useState(
         {
             'username': dates.username,
-            'password': null,
+            'password': '',
             'first_name': dates.first_name,
             'last_name': dates.last_name,
             'rank': dates.rank,
@@ -30,6 +30,7 @@ function AdminCard({ dates, currentUser, fetch, logout}) {
                 `/admins/update_admin/${username}`,
                 credentials
             )
+            console.log(credentials)
             if (response.data['success']) {
                 await fetch()
                 alert('Успешно')
@@ -62,7 +63,7 @@ function AdminCard({ dates, currentUser, fetch, logout}) {
     const modalWindow = () => {
         if (type === 'edit') {
             return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10 p-12 overflow-hidden">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10 p-2 2xl:p-12 overflow-hidden">
                     <div className="card-body bg-[#E9EBF6] w-[500px] p-3 rounded-2xl flex flex-col gap-4">
                         <div className="head flex flex-row items-center justify-center p-2 bg-[#D6D4F6] rounded-3xl gap-4">
                             <div className="avatar">
@@ -72,8 +73,8 @@ function AdminCard({ dates, currentUser, fetch, logout}) {
                                     className="w-[70px] h-[70px] rounded-full"/>
                             </div>
                             <div
-                                className="info p-3 rounded-2xl flex flex-row items-center gap-4">
-                                <div className="names text-left p-2 rounded-2xl flex flex-col gap-1">
+                                className="info p-1 rounded-2xl flex flex-col items-left gap-4">
+                                <div className="names text-left flex flex-col gap-1">
                                     <p className={`text-black font-bold`}>{dates.first_name}</p>
                                     <p className={`text-black font-bold`}>{dates.last_name}</p>
                                 </div>
@@ -85,8 +86,8 @@ function AdminCard({ dates, currentUser, fetch, logout}) {
                         </div>
 
                         <div className="body p-2 w-full bg-[#D6D4F6] rounded-3xl">
-                            <div className="content-box flex flex-row w-full p-2">
-                                <div className="head w-1/2 p-2">
+                            <div className="content-box flex flex-row max-md:flex-col w-full p-2">
+                                <div className="head w-1/2 p-2 max-md:w-full max-md:text-center">
                                     <p className="text-black">Параметры</p>
                                 </div>
                                 <div className="parameters w-full">
@@ -177,7 +178,7 @@ function AdminCard({ dates, currentUser, fetch, logout}) {
                                             />
                                         </div>
                                         <div className="avatar col-span-full flex flex-col items-center">
-                                            <label>
+                                            <label className={`w-full`}>
                                                 <input
                                                     type="file"
                                                     hidden
@@ -229,7 +230,7 @@ function AdminCard({ dates, currentUser, fetch, logout}) {
             )
         } else {
             return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10 p-12 overflow-hidden">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10 p-2 overflow-hidden">
                     <div className="card-body bg-[#E9EBF6] w-[500px] p-3 rounded-2xl flex flex-col gap-4">
                         <div
                             className="head flex flex-row items-center justify-center p-2 bg-[#D6D4F6] rounded-3xl gap-4">
@@ -240,8 +241,8 @@ function AdminCard({ dates, currentUser, fetch, logout}) {
                                     className="w-[70px] h-[70px] rounded-full"/>
                             </div>
                             <div
-                                className="info p-3 rounded-2xl flex flex-row items-center gap-4">
-                                <div className="names text-left p-2 rounded-2xl flex flex-col gap-1">
+                                className="info p-3 rounded-2xl flex flex-col items-left md:items-center gap-4">
+                                <div className="names text-left flex flex-col gap-1">
                                     <p className={`text-black font-bold`}>{dates.first_name}</p>
                                     <p className={`text-black font-bold`}>{dates.last_name}</p>
                                 </div>
@@ -254,7 +255,7 @@ function AdminCard({ dates, currentUser, fetch, logout}) {
                         <div className="body">
                             <div className="content-box flex flex-col gap-3">
                                 <div className="header">
-                                    <p className="text-black">Вы точно хотите удалить данный профиль?</p>
+                                    <p className="text-black text-center">Вы точно хотите удалить данный профиль?</p>
                                 </div>
                                 <div className="buttons">
                                     <div className="buttons flex flex-row gap-2 w-full">
@@ -284,17 +285,17 @@ function AdminCard({ dates, currentUser, fetch, logout}) {
 
 
     return (
-        <div className="bg-[#E9EBF6] rounded-2xl p-4 flex flex-col gap-4">
-            <div className="header flex flex-row w-full gap-2 justify-between items-center">
+        <div className={`${dates?.username === currentUser.username ? `bg-[#dbdff7]` : `bg-[#E9EBFB]`} rounded-2xl p-4 flex flex-col gap-4 justify-between w-full`}>
+            <div className="header flex flex-row max-sm:flex-col w-full gap-2 justify-center items-center">
                 <div
-                    className="rank bg-[#B9B6FF] rounded-2xl p-3 inline-block">
+                    className="rank bg-[#B9B6FF] rounded-2xl p-3 inline-block max-sm:text-center max-sm:w-full">
                     <p className={`text-black w-full`}>{dates.rank}</p>
                 </div>
                 {
                     dates?.username === currentUser.username &&
-                    <div className="p-3 rounded-2xl bg-[#B9B6FF]">
+                    <div className="p-3 rounded-2xl bg-[#B9B6FF] max-sm:text-center max-sm:w-full">
                         <p className="text-black">
-                            Это вы
+                            Вы
                         </p>
                     </div>
                 }

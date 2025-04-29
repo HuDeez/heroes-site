@@ -94,9 +94,10 @@ async def update_admin(
 
     password = admin_model.password
 
-    if password is None:
-        admin_model.password = None
-        admin_model = AdminUpdateModel(**admin_model.dict(exclude_none=True))
+    if password == '':
+        del admin_model.password
+    else:
+        admin_model.password = get_password_hash(password)
 
     await repository.update(username, admin_model)
 

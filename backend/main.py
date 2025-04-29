@@ -4,16 +4,16 @@ from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from fastapi.staticfiles import StaticFiles
 import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
 from api.v1.auth.sessions.router import router as session_router
-from api.v1.database.database import drop_table, create_table
+from api.v1.database.database import create_table, drop_table
 from api.v1.entities.admin.router import router as admin_router
 from api.v1.entities.hero.router import router as heroes_router
 from api.v1.entities.news.router import router as news_router
+from api.v1.entities.search.router import router as search_router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from scheduler.scheduler import start
 
 now = datetime.now().strftime("%d-%m-%Y")
@@ -44,7 +44,7 @@ logging.basicConfig(
 async def lifespan(app: FastAPI):
     await drop_table()
     await create_table()
-    await start() # type: ignore
+    await start()  # type: ignore
     yield
 
 
@@ -61,7 +61,7 @@ app.add_middleware(
         "http://127.0.0.1:8000",
         "http://localhost:5173",
         "http://31.128.47.37",
-        "https://31.128.47.37"
+        "https://31.128.47.37",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -71,6 +71,7 @@ app.include_router(heroes_router)
 app.include_router(admin_router)
 app.include_router(news_router)
 app.include_router(session_router)
+app.include_router(search_router)
 
 
 @app.get("/", tags=["Корень"])
@@ -79,4 +80,5 @@ async def root():
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host='0.0.0.0', port=8000)
+    # uvicorn.run("main:app", port=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)

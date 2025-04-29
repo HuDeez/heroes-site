@@ -30,6 +30,7 @@ export default function News() {
         fetchNews();
     }, [])
 
+
     return (
         <>
             {loading && <LoadingCard />}

@@ -1,24 +1,22 @@
 import logging
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.ext.asyncio import async_sessionmaker
-from sqlalchemy.ext.asyncio import create_async_engine
-
 from api.v1.auth.sessions.schema import SessionDeclarative as SessionBase
 from api.v1.entities.admin.schema import AdminDeclarative as AdminBase
 from api.v1.entities.hero.schema import HeroDeclarative as HeroBase
 from api.v1.entities.news.schema import NewsDeclarative as NewsBase
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 logger = logging.getLogger(__name__)
 
 engine = create_async_engine(
-    url='postgresql+asyncpg://root:root@db:5432/postgres'
+    url="postgresql+asyncpg://root:root@db:5432/postgres"
 )
+# engine = create_async_engine(
+#     url="postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
+# )
 
 get_session = async_sessionmaker(
-    bind=engine,
-    expire_on_commit=False,
-    class_=AsyncSession
+    bind=engine, expire_on_commit=False, class_=AsyncSession
 )
 
 

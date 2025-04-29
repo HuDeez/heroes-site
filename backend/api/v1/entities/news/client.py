@@ -1,17 +1,28 @@
-import asyncio
 import datetime as dt
 import logging
 from math import ceil
+import random
 
 from aiohttp import ClientSession
+from api.v1.entities.news.repository import NewsRepository
+from api.v1.entities.news.schema import NewsBase
 from async_lru import alru_cache
 from bs4 import BeautifulSoup
-from sqlalchemy import select, update
-
-from api.v1.entities.news.repository import NewsRepository
-from api.v1.entities.news.schema import NewsORM, NewsBase
 
 logger = logging.getLogger(__name__)
+
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/123.0",
+]
+
+
+headers = {
+    'User-Agent': random.choice(USER_AGENTS),
+    'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9',
+}
 
 
 class HTTPClient:
@@ -41,7 +52,7 @@ class HTTPClient:
                 content = await response.text()     
                 if "Ошибка 429" in content:
                     logger.error(
-                        msg="Too many requests. Repeating a request..."
+                        msg="Too many requests"
                     )       
                     return None
                     

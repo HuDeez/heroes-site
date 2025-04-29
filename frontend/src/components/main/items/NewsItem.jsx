@@ -45,7 +45,7 @@ function DesktopNewsItem({ newsData }) {
                             <h1 className={`w-full text-2xl xl:text-4xl`}>{newsData.title}</h1>
                         </div>
 
-                        <div className="subtitle text-pretty hyphens-auto tracking-[-1px] text-justify">
+                        <div className="subtitle text-pretty hyphens-auto tracking-[-1px] text-center lg:text-left">
                             <p className={`text-base xl:text-2xl`}>{newsData.description}</p>
                         </div>
 
@@ -63,14 +63,21 @@ function DesktopNewsItem({ newsData }) {
                     </div>
                 </div>
             </div>
-            <div className="box-content p-6 flex flex-col items-center gap-6">
-                <div className="head">
-                    <h1>Информация</h1>
+            {
+                newsData.content &&
+                <div className="box-content p-6 flex flex-col items-center gap-6">
+
+                    <div className="head">
+                        <h1>Информация</h1>
+                    </div>
+
+                    <div className="content p-4 bg-[#181a1e] rounded-2xl w-full">
+                        <p className="text-[21px] text-balance text-justify leading-10">{newsData.content}</p>
+                    </div>
+
                 </div>
-                <div className="content p-4 bg-[#181a1e] rounded-2xl">
-                    <p className="text-[21px] text-balance text-justify leading-10">{newsData.content}</p>
-                </div>
-            </div>
+                
+            }
         </>
     )
 };
@@ -91,20 +98,27 @@ function MobileNewsItem({newsData}) {
                     <div className="header text-balance break-words text-center hyphens-auto tracking-[1px]">
                         <h1 className="w-full text-2xl sm:text-3xl">{newsData.title}</h1>
                     </div>
+                    <div className="trait bg-[#131417] p-4 rounded-2xl w-full">
+                        <p className="text-xl text-center">{newsData.description}</p>
+                    </div>
                 </div>
             </div>
-            <div className="content">
-                <div className="content-box flex flex-col gap-6 items-center">
-                    <div className="header">
-                        <h1>Информация</h1>
-                    </div>
-                    <div className="body-content p-6">
-                        <div className="body-box p-4 bg-[#181a1e] hyphens-auto rounded-2xl text-xl text-justify text-balance wrap-break-word tracking-[-1px] sm:text-justify w-full sm:text-2xl">
-                            <p className="w-full">{newsData.description}</p>
+            {
+                newsData.content &&
+                <div className="content">
+                    <div className="content-box flex flex-col gap-6 items-center">
+                        <div className="header">
+                            <h1>Информация</h1>
+                        </div>
+
+                        <div className="body-content p-6">
+                            <div className="body-box p-4 bg-[#181a1e] hyphens-auto rounded-2xl text-xl text-left text-balance wrap-break-word tracking-[-1px] w-full sm:text-2xl leading-[50px]">
+                                <p className="w-full">{newsData.content}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         </>
     )
 };
