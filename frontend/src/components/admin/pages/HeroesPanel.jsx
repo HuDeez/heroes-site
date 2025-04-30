@@ -2,12 +2,9 @@ import {useContext, useEffect, useState} from "react";
 import apiClient from "../api/client.jsx";
 import HeroPanelCard from "../components/HeroPanelCard.jsx";
 import {AuthContext} from "../contexts/AuthContext.jsx";
-import AdminCard from "../components/AdminCard.jsx";
 
 export default function HeroesPanel() {
     const {isMobile} = useContext(AuthContext)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
     const [heroes, setHeroes] = useState([]);
     const [isModal, setIsModal] = useState(false)
     const [credentials, setCredentials] = useState(
@@ -24,9 +21,7 @@ export default function HeroesPanel() {
         try {
             const response = await apiClient.get("/heroes/get_heroes");
             setHeroes(response.data);
-            setLoading(false)
         } catch (err) {
-            setError(err)
             console.log(err);
         }
     }
@@ -100,7 +95,7 @@ export default function HeroesPanel() {
                                     <div className="card_description text-inherit">
                                         <label htmlFor="description" className="text-inherit">Описание карточки: </label>
                                         <textarea
-                                            className="p-2 rounded-xl text-black w-full text-base max-md:max-h-[100px] overflow-auto"
+                                            className="p-2 rounded-xl text-black w-full text-base max-h-[100px] overflow-auto"
                                             name="card_description"
                                             id="card_description"
                                             rows="10"
@@ -113,7 +108,7 @@ export default function HeroesPanel() {
                                     <div className="description text-inherit">
                                         <label htmlFor="description" className="text-inherit">Описание: </label>
                                         <textarea
-                                            className="p-2 rounded-xl text-black w-full text-base size-full max-md:max-h-[100px] overflow-auto"
+                                            className="p-2 rounded-xl text-black w-full text-base max-h-[200px] overflow-auto"
                                             name="description"
                                             id="description"
                                             rows="10"

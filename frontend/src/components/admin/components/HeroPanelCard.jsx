@@ -116,7 +116,7 @@ export default function HeroPanelCard({ dates, fetch }) {
                                         <div className="card_description text-inherit overflow-auto">
                                             <label htmlFor="description" className="text-inherit">Описание карточки: </label>
                                             <textarea
-                                                className="p-2 rounded-xl text-black w-full text-base max-md:max-h-[100px]"
+                                                className="p-2 rounded-xl text-black w-full text-base max-h-[100px] overflow-auto"
                                                 name="card_description"
                                                 id="card_description"
                                                 rows="10"
@@ -130,7 +130,7 @@ export default function HeroPanelCard({ dates, fetch }) {
                                         <div className="description text-inherit">
                                             <label htmlFor="description" className="text-inherit">Описание: </label>
                                             <textarea
-                                                className="p-2 rounded-xl text-black w-full text-base size-full max-md:max-h-[100px] overflow-auto"
+                                                className="p-2 rounded-xl text-black w-full text-base max-md:max-h-[100px] max-h-[200px] overflow-auto"
                                                 name="description"
                                                 id="description"
                                                 rows="10"

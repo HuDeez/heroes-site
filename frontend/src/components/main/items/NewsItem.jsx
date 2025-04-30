@@ -64,19 +64,30 @@ function DesktopNewsItem({ newsData }) {
                 </div>
             </div>
             {
-                newsData.content &&
-                <div className="box-content p-6 flex flex-col items-center gap-6">
+                newsData.content ?
+                    <div className="box-content p-6 flex flex-col items-center gap-6">
 
-                    <div className="head">
-                        <h1>Информация</h1>
+                        <div className="head">
+                            <h1>Информация</h1>
+                        </div>
+
+                        <div className="content p-4 bg-[#181a1e] rounded-2xl w-full">
+                            <p className="text-[21px] text-balance text-justify leading-10">{newsData.content}</p>
+                        </div>
+
+                    </div>
+                    :
+                    <div className={`button-box`}>
+                        <div className="button p-4 bg-blue-700 rounded-2xl hover:bg-blue-600">
+                            <a
+                                href={`https://news.mail.ru/svo/${newsData.article_id}`}
+                                target="_blank"
+                            >
+                                Перейти к источнику
+                            </a>
+                        </div>
                     </div>
 
-                    <div className="content p-4 bg-[#181a1e] rounded-2xl w-full">
-                        <p className="text-[21px] text-balance text-justify leading-10">{newsData.content}</p>
-                    </div>
-
-                </div>
-                
             }
         </>
     )
@@ -89,10 +100,10 @@ function MobileNewsItem({newsData}) {
             <div className="head p-6">
                 <div className="head-box flex flex-col items-center p-4 bg-[#181a1e] rounded-2xl gap-4">
                     <div className="image">
-                        <img 
-                        src={newsData.image_url ? newsData.image_url : '/default.jpg'}
-                        alt="article image" 
-                        className="rounded-3xl object-cover w-full h-full"
+                        <img
+                            src={newsData.image_url ? newsData.image_url : '/default.jpg'}
+                            alt="article image"
+                            className="rounded-3xl object-cover w-full h-full"
                         />
                     </div>
                     <div className="header text-balance break-words text-center hyphens-auto tracking-[1px]">
@@ -104,21 +115,32 @@ function MobileNewsItem({newsData}) {
                 </div>
             </div>
             {
-                newsData.content &&
-                <div className="content">
-                    <div className="content-box flex flex-col gap-6 items-center">
-                        <div className="header">
-                            <h1>Информация</h1>
-                        </div>
+                newsData.content ?
+                    <div className="content">
+                        <div className="content-box flex flex-col gap-6 items-center">
+                            <div className="header">
+                                <h1>Информация</h1>
+                            </div>
 
-                        <div className="body-content p-6">
-                            <div className="body-box p-4 bg-[#181a1e] hyphens-auto rounded-2xl text-xl text-left text-balance wrap-break-word tracking-[-1px] w-full sm:text-2xl leading-[50px]">
-                                <p className="w-full">{newsData.content}</p>
+                            <div className="body-content p-6">
+                                <div className="body-box p-4 bg-[#181a1e] hyphens-auto rounded-2xl text-xl text-left text-balance wrap-break-word tracking-[-1px] w-full sm:text-2xl leading-[50px]">
+                                    <p className="w-full">{newsData.content}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    :
+                    <div className={`button-box`}>
+                        <div className="button p-4 bg-blue-700 rounded-2xl hover:bg-blue-600">
+                            <a
+                                href={`https://news.mail.ru/svo/${newsData.article_id}`}
+                                target="_blank"
+                            >
+                                Перейти к источнику
+                            </a >
+                        </div>
+                    </div>
             }
         </>
     )
-};
+}

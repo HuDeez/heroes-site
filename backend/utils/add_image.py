@@ -31,9 +31,8 @@ async def save_hero_image(base64_img: bytes, hero_id: int) -> bool:
         dates = get_dates(base64_img)
 
         recovered = dates['recovered']
-        extension = dates['extension']
 
-        file_path = path / f'{hero_id}.{extension}'
+        file_path = path / f'{hero_id}.png'
 
         async with open(file=file_path, mode='wb') as f:
             await f.write(recovered)
